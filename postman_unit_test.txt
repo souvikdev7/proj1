@@ -1,0 +1,100 @@
+
+ Unit testing with postman
+===============================
+
+https://www.youtube.com/c/postman/videos
+
+
+https://learning.postman.com/docs/writing-scripts/script-references/test-examples/
+
+https://www.youtube.com/watch?v=EVg6gxeiUd0
+
+
+Under Tests tab
+
+pm.test("Status code : ", function () {
+    pm.response.to.have.status(201);
+});
+pm.test("Key value check", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.name).to.eql("0");
+});
+
+
+======================
+
+
+Body Tab
+
+{"a":"{{firstVal}}","b":10}
+
+
+Pre-requestScript Tab
+
+var randomValue = Math.random() * 10;
+pm.environment.set("firstVal",randomValue);
+
+
+Tests Tab
+
+pm.test("Response check", function () {
+    var jsonData = pm.response.json();   
+    let v1  = pm.environment.get("firstVal");
+    pm.expect(jsonData).to.be.above(v1);
+    //pm.expect(jsonData).to.be.below(v1);
+    //pm.expect(jsonData).to.eql("0");
+});
+
+
+======================
+
+https://www.youtube.com/watch?v=vVDZxeS865g
+
+
+Body
+-----
+
+{"a":"{{$randomInt}}","b":10}
+
+
+Pre-requestScript Tab
+-------------------------
+
+var newVal1 = pm.variables.replaceIn("{{$randomBs}}");
+pm.environment.set("newData",newVal1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
