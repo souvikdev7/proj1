@@ -124,9 +124,3 @@ describe('Users',()=>{
     });
 
 });
-
- 
-
-
-Run a Collection
-https://www.youtube.com/watch?v=8UR1NzuT7jg
