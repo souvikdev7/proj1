@@ -76,7 +76,13 @@ https://www.youtube.com/watch?v=8UR1NzuT7jg
 
 
 
-
+pm.response.to.have.status(200);
+pm.response.to.not.be.error;
+pm.response.to.have.jsonBody("");
+pm.response.to.not.have.jsonBody("error");
+pm.response.to.be.ok;
+pm.response.to.be.withBody;
+pm.response.to.be.json;
 
 
 

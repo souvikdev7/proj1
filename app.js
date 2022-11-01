@@ -2,8 +2,25 @@ const express = require("express");
 const app = express();
 var port = process.env.PORT || 3000;
 
+
+const mongoose = require('mongoose');
+var dbUrl =  "mongodb://127.0.0.1:27017/mydb"; 
+mongoose.connect(dbUrl, {   
+  useUnifiedTopology: true,
+  useNewUrlParser: true    
+}).then(() => {
+  console.log("Database connected successfully!");
+}).catch((error) => {
+  console.log(error);
+})
+
+
+
+
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+
+
 
 
 const options = {
@@ -210,5 +227,38 @@ app.get('/allusers1/:id',(req,res) => res.json([{"name":"Anil","email":"anil88@g
     res.json(c);
     console.log('Result : '+c);
 });
+
+
+
+
+const empModel = require('./models/employee');
+
+app.get('/getdata', async (req,res) => {
+    
+  await empModel.Employee.find()
+  .then(response => {    
+      res.json({ response });      
+  })
+  .catch(error => {
+      console.log(error);
+      res.json({ message : "Error Occurred" });  
+  });
+  
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(port,()=> console.log("Server running on port"+port));
