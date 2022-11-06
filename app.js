@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 var port = process.env.PORT || 3000;
-
+const Logger = require('./helper/logger');
+const Handler = require('./helper/handler');
 
 const mongoose = require('mongoose');
 var dbUrl =  "mongodb://127.0.0.1:27017/mydb"; 
@@ -192,6 +193,7 @@ app.get('/allusers1/:id',(req,res) => res.json([{"name":"Anil","email":"anil88@g
      let c = parseInt(a) + parseInt(b);
      res.json(c);
      console.log('Result : '+c);
+     Logger.write('Result : '+c);
      console.log(req.headers.authorization); // <-- token
  });
 
@@ -232,6 +234,7 @@ app.get('/allusers1/:id',(req,res) => res.json([{"name":"Anil","email":"anil88@g
 
 
 const empModel = require('./models/employee');
+const { reserved } = require("mongoose/lib/schema");
 
 app.get('/getdata', async (req,res) => {
     
@@ -247,11 +250,45 @@ app.get('/getdata', async (req,res) => {
 });
 
 
+const returnSet  = {"status":true,data:""};
+const returnErrorSet  = {"status":false,"error":""};
 
 
 
+app.post('/registerUser', async(req, res) => {
+  try {   
+    await Handler.registerUser(req,res);        
+  } 
+  catch(err) {    
+    console.log(err);
+    returnErrorSet.error = err;
+		return res.status(500).send(returnErrorSet);
+  }
+});
+
+app.post('/loginUser', async(req, res) => {
+  try {    
+    await Handler.checkLogin (req,res);      
+  } 
+  catch(err) {    
+    returnErrorSet.error = err;
+		return res.status(500).send(returnErrorSet);
+  }
+});
 
 
+app.get('/getDetails',Handler.chkAuthToken,async(req, res) => {
+
+  try {
+    let result= await empModel.Employee.find();
+    returnSet.data = result;
+    res.status(200).json(returnSet);
+  } 
+  catch(err) {
+    returnErrorSet.error = err;
+		return res.status(500).send(returnErrorSet);
+  }
+});
 
 
 
