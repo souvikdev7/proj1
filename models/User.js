@@ -9,7 +9,15 @@ const mongoose = require('mongoose');
     date : {type: Date, default: Date.now()}
   });
   
+  
+  userSchema.statics.findByEmail = async function (v) {
+  await this.find({ email: v })
+}
+  
+  
   //let Employee = mongoose.model('Employee', employeeSchema,'Employees');
   //module.exports = {Employee};
+  
+  
 
   module.exports = mongoose.model("User", userSchema,'Users');

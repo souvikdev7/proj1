@@ -16,7 +16,15 @@ mongoose.connect(dbUrl, {
 })
 
 
+/**
+ * PASSPORT
+ */
+ const passport = require('passport');
+ const PassportCheck = require('./helper/passportHandler');
+ passport.initialize();
+ PassportCheck.applyPassportStrategy(passport);
 
+ 
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -236,6 +244,7 @@ app.get('/allusers1/:id',(req,res) => res.json([{"name":"Anil","email":"anil88@g
 const empModel = require('./models/employee');
 const { reserved } = require("mongoose/lib/schema");
 
+
 app.get('/getdata', async (req,res) => {
     
   await empModel.Employee.find()
@@ -281,6 +290,35 @@ app.get('/getDetails',Handler.chkAuthToken,async(req, res) => {
 
   try {
     let result= await empModel.Employee.find();
+    returnSet.data = result;
+    res.status(200).json(returnSet);
+  } 
+  catch(err) {
+    returnErrorSet.error = err;
+		return res.status(500).send(returnErrorSet);
+  }
+});
+
+
+
+app.get('/getAllDetails',passport.authenticate('jwt', { session: false }),async(req, res) => {
+
+  try {
+    let result= await empModel.Employee.find();
+    returnSet.data = result;
+    res.status(200).json(returnSet);
+  } 
+  catch(err) {
+    returnErrorSet.error = err;
+		return res.status(500).send(returnErrorSet);
+  }
+});
+
+
+app.get('/gettest',async(req, res) => {
+  try {    
+    result= await Handler.getData(); 
+
     returnSet.data = result;
     res.status(200).json(returnSet);
   } 

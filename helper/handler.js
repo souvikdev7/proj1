@@ -4,8 +4,12 @@ const bcrypt = require('bcrypt');
 const SALT = 10;
 const process = require('process');
 const usrModel = require('../models/user');
+const postModel = require('../models/post');
+const Execute = require('../models/execute');
 const Joi = require("joi");
 const { log } = require('console');
+const crypto = require('crypto');
+
 
 const getPreviousDate = function (diff) {    
     let date = new Date();
@@ -19,6 +23,10 @@ const createUID = () => {
     let full  = head+tail;
     const plain = Buffer.from(full, 'utf8').toString('base64');
     return plain;
+}
+
+const createNewUUID = () => {    
+    return crypto.randomUUID();
 }
 
 
@@ -93,11 +101,11 @@ const checkLogin = async(req,res) => {
         return res.status(401).json({"status":false,"data":{"msg":"Invalid Credentials"}});
     }*/
 
-    const registerSchema = Joi.object({       
+    const loginSchema = Joi.object({       
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }).required(),
         password : Joi.string().required()
     });         
-    const { value, error }   = registerSchema.validate(req.body);             
+    const { value, error }   = loginSchema.validate(req.body);             
     if(error)
     {            
         return res.status(401).json({"status":false,"data":{"msg":error.details[0].message}});
@@ -123,7 +131,10 @@ const checkLogin = async(req,res) => {
     }    
 }
 
+const getData = () => {                
+    //return Execute.getQueryData();
+    return Execute.getResults(5);
+}
 
 
-
-module.exports = {getPreviousDate,createUID,createToken,chkAuthToken,registerUser,checkLogin};
+module.exports = {getPreviousDate,createUID,createToken,chkAuthToken,registerUser,checkLogin,getData};
