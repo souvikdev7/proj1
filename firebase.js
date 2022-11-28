@@ -81,4 +81,11 @@ let remove = async (v)=>{
 //create({"name":"Rajesh",age:9});
 //getData();
 //update({"id":"pDysMTPc2hpSb69y4Rpd","age":20,"name":"Aman"});
-//remove({"id":"pDysMTPc2hpSb69y4Rpd"}); 
+//remove({"id":"bJcsvlqzJeVoCAayNCGY"}); 
+
+
+
+
+ 
+
+ 
